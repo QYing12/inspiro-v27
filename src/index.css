@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── design tokens ─────────────────────────────────────────────────────── */
+/* Mirrored from tailwind.config.js so raw CSS (this file) and component
+   utility classes stay in lockstep. Light "digital notebook" system. */
+:root {
+  /* surfaces */
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-2: #f8f9fa;
+  --surface-3: #eef0f3;
+  --border: #e5e7eb;
+  --border-strong: #d1d5db;
+
+  /* text */
+  --ink: #0f1012;
+  --paper: #1f2024;      /* primary body text (name kept for continuity) */
+  --muted: #74777f;
+  --dim: #a0a3aa;
+
+  /* accents */
+  --accent: #55ddd1;
+  --accent-deep: #14b8a6;
+  --accent-soft: #e3fbf7;
+  --coral: #fb8c6b;
+  --amber: #f5c451;
+  --lilac: #b5a8ff;
+
+  /* shadows — soft & dimensional, never neon */
+  --shadow-sm: 0 1px 2px rgba(20, 25, 35, 0.04);
+  --shadow-md: 0 4px 16px rgba(20, 25, 35, 0.06);
+  --shadow-lg: 0 12px 32px rgba(20, 25, 35, 0.08);
+
+  /* radii */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  font-family: "Urbanist", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  color: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Helvetica for all H1 per product spec */
+h1 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* ─── utilities ─────────────────────────────────────────────────────────── */
+
+.meta {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  text-transform: uppercase;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* card 3d flip */
+.flip-perspective { perspective: 1200px; }
+.flip-surface {
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.flip-surface.is-flipped { transform: rotateY(180deg); }
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back { transform: rotateY(180deg); }
+
+/* brand mark processing animation — rotates the whole mark around its bbox */
+@keyframes starspin {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+.star-processing .rays {
+  animation: starspin 2.4s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+/* blinking caret for typed status */
+@keyframes caret {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+.caret::after {
+  content: "▍";
+  margin-left: 2px;
+  animation: caret 800ms steps(2) infinite;
+}
+
+/* slow float for landing hero cards */
+@keyframes float-a { 0%,100%{transform:translateY(0) rotate(-4deg);} 50%{transform:translateY(-14px) rotate(-4deg);} }
+@keyframes float-b { 0%,100%{transform:translateY(-6px) rotate(5deg);} 50%{transform:translateY(8px) rotate(5deg);} }
+@keyframes float-c { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-10px) rotate(-2deg);} }
+.float-a { animation: float-a 7s ease-in-out infinite; }
+.float-b { animation: float-b 8.5s ease-in-out infinite; }
+.float-c { animation: float-c 9s ease-in-out infinite; }
+
+/* faint noise for landing — barely-there texture on the light hero */
+.noise {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.03;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
